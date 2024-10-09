@@ -1,0 +1,4 @@
+MOV C, A
+DIV B
+MUL B
+SUB A, C

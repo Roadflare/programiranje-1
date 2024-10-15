@@ -8,8 +8,14 @@
  - : int = 4
 [*----------------------------------------------------------------------------*)
 
-let square = fun x -> x ** 2
+let square = fun x -> x * x
 
+(*
+let rec exp (x, n)
+  match n with
+  | 0 -> 1
+  | _ -> x * exp x (n - 1)
+*)
 (*----------------------------------------------------------------------------*]
  Funkcija [middle_of_triple] vrne srednji element trojice.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,7 +33,8 @@ let middle_of_triple = fun (a, b, c) -> b
  - : int = 1
 [*----------------------------------------------------------------------------*)
 
-let starting_element = (a)
+let starting_element a =
+  match a with
   | [] -> raise Exit
   | x :: xs -> x
 
@@ -39,10 +46,10 @@ let starting_element = (a)
  - : int = 48
 [*----------------------------------------------------------------------------*)
 
-let rec multiply = (a)
+let rec multiply a =
   match a with
   | [] -> 1
-  | _ -> starting_element a * multiply val tl a
+  | x :: xs -> x * multiply xs
 
 (*----------------------------------------------------------------------------*]
  Napišite funkcijo ekvivalentno python kodi:
@@ -59,12 +66,11 @@ let rec multiply = (a)
  - : int list = [-1; 7; 0]
 [*----------------------------------------------------------------------------*)
 
-let rec sum_int_pairs = (a)
-  function
+let rec sum_int_pairs a =
+  match a with
   | [] -> []
-  | x :: xs -> starting_element x + val tl x + sum_int_pairs xs
-(*      | _ -> starting_element(starting_element(a)) + starting_element(val tl a(starting_element(a)))
-*)
+  | x :: xs -> multiply x + sum_int_pairs xs
+
 (*----------------------------------------------------------------------------*]
  Funkcija [get k list] poišče [k]-ti element v seznamu [list]. Številčenje
  elementov seznama (kot ponavadi) pričnemo z 0. Če je k negativen, funkcija
@@ -74,10 +80,10 @@ let rec sum_int_pairs = (a)
  - : int = 1
 [*----------------------------------------------------------------------------*)
 
-let rec get = (a, k)
-      function
-      | k <= 0 -> starting_element(a)
-      | _ -> val nth a k
+let rec get a k =
+  match k with
+  | k <= 0 -> starting_element a
+  | _ -> val nth a k
 
 (*----------------------------------------------------------------------------*]
  Funkcija [double] podvoji pojavitve elementov v seznamu.
@@ -102,7 +108,7 @@ let rec double = (a)
 [*----------------------------------------------------------------------------*)
 
 let rec insert = (x k y)
-  function
+  match k with
   | k <= 0 -> x :: y
   | k >= val length y -> y :: x
   | _ -> starting_element y :: insert x k-1 :: y
@@ -119,8 +125,8 @@ let rec insert = (x k y)
 [*----------------------------------------------------------------------------*)
 
 let rec divide = (k x)
-      function
-      | k >= val tl x -> [(); x]
+      match k with
+      | k >= length -> (x, [])
       | _ -> 
 
 (*----------------------------------------------------------------------------*]
@@ -131,7 +137,10 @@ let rec divide = (k x)
  - : int list = [3; 4; 5; 1; 2]
 [*----------------------------------------------------------------------------*)
 
-let rotate = ()
+let rotate = (n x)
+  match n with
+  | 0 -> x
+  | _ -> rotate n xs :: x
 
 (*----------------------------------------------------------------------------*]
  Funkcija [remove x list] iz seznama izbriše vse pojavitve elementa [x].

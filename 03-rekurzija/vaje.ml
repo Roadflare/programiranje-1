@@ -8,16 +8,26 @@
  imenom `ime_funkcije_tlrec`.
 [*----------------------------------------------------------------------------*)
 
-(*----------------------------------------------------------------------------*
- ## Funkcija `reverse`
+let rec reverse list =
+  let rec aux acc = function
+    | [] -> acc
+    | h :: t -> aux (h :: acc) t
+  in aux [] list
+
+(*----------------------------------------------------------------------------*]
+ Funkcija [repeat x n] vrne seznam [n] ponovitev vrednosti [x]. Za neprimerne
+ vrednosti [n] funkcija vrne prazen seznam.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ # repeat "A" 5;;
+ - : string list = ["A"; "A"; "A"; "A"; "A"]
+ # repeat "A" (-2);;
+ - : string list = []
 [*----------------------------------------------------------------------------*)
 
-(*----------------------------------------------------------------------------*
- Definirajte pomožno funkcijo za obračanje seznamov. Funkcija naj bo repno
- rekurzivna.
-[*----------------------------------------------------------------------------*)
-
-let reverse _ = ()
+let rec repeat str x =
+  match x with
+  | x when x <= 0 -> []
+  | x -> str :: repeat str (x - 1) 
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `repeat`
@@ -28,13 +38,11 @@ let reverse _ = ()
   vrednosti `n` funkcija vrne prazen seznam.
 [*----------------------------------------------------------------------------*)
 
-let rec repeat _ _ = ()
-
-let primer_repeat_1 = repeat "A" 5
-(* val primer_repeat_1 : string list = ["A"; "A"; "A"; "A"; "A"] *)
-
-let primer_repeat_2 = repeat "A" (-2)
-(* val primer_repeat_2 : string list = [] *)
+let rec range n =
+  let rec aux = function
+    | a when a = n -> []
+    | a -> a :: aux (a + 1)
+in aux 0
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `range`
@@ -47,10 +55,8 @@ let primer_repeat_2 = repeat "A" (-2)
  funkcije `List.init`.
 [*----------------------------------------------------------------------------*)
 
-let range _ = ()
-
-let primer_range = range 10
-(* val primer_range : int list = [0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10] *)
+let rec map f l =
+  List.fold_right (fun h t -> f h :: t) l []
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `map`

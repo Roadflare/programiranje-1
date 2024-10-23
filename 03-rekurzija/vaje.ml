@@ -13,6 +13,11 @@ let rec reverse list =
     | [] -> acc
     | h :: t -> aux (h :: acc) t
   in aux [] list
+let rec reverse list =
+  let rec aux acc = function
+    | [] -> acc
+    | h :: t -> aux (h :: acc) t
+  in aux [] list
 
 (*----------------------------------------------------------------------------*]
  Funkcija [repeat x n] vrne seznam [n] ponovitev vrednosti [x]. Za neprimerne
@@ -24,6 +29,10 @@ let rec reverse list =
  - : string list = []
 [*----------------------------------------------------------------------------*)
 
+let rec repeat str x =
+  match x with
+  | x when x <= 0 -> []
+  | x -> str :: repeat str (x - 1) 
 let rec repeat str x =
   match x with
   | x when x <= 0 -> []
@@ -43,6 +52,11 @@ let rec range n =
     | a when a = n -> []
     | a -> a :: aux (a + 1)
 in aux 0
+let rec range n =
+  let rec aux = function
+    | a when a = n -> []
+    | a -> a :: aux (a + 1)
+in aux 0
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `range`
@@ -55,6 +69,8 @@ in aux 0
  funkcije `List.init`.
 [*----------------------------------------------------------------------------*)
 
+let rec map f l =
+  List.fold_right (fun h t -> f h :: t) l []
 let rec map f l =
   List.fold_right (fun h t -> f h :: t) l []
 

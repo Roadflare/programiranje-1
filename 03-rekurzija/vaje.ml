@@ -1,11 +1,7 @@
-(*----------------------------------------------------------------------------*
- # Rekurzija
-[*----------------------------------------------------------------------------*)
+(* ========== Vaja 2: Funkcijsko Programiranje  ========== *)
 
-(*----------------------------------------------------------------------------*
- Napišite spodaj opisane funkcije, ne da bi uporabljali funkcije iz standardne
- knjižnice. Kjer to kažejo primeri, napišite tudi repno rekurzivne različice z
- imenom `ime_funkcije_tlrec`.
+(*----------------------------------------------------------------------------*]
+ Definirajte pomožno funkcijo za obračanje seznamov.
 [*----------------------------------------------------------------------------*)
 
 let rec reverse list =
@@ -39,13 +35,14 @@ let rec repeat str x =
   | x -> str :: repeat str (x - 1)
   | x -> str :: repeat str (x - 1)
 
-(*----------------------------------------------------------------------------*
- ## Funkcija `repeat`
-[*----------------------------------------------------------------------------*)
-
-(*----------------------------------------------------------------------------*
- Funkcija `repeat x n` vrne seznam `n` ponovitev vrednosti `x`. Za neprimerne
-  vrednosti `n` funkcija vrne prazen seznam.
+(*----------------------------------------------------------------------------*]
+ Funkcija [range] sprejme število in vrne seznam vseh celih števil od 0 do
+ vključno danega števila. Za neprimerne argumente funkcija vrne prazen seznam.
+ Funkcija je repno rekurzivna.
+Pri tem ne smete uporabbiti vgrajene funkcije [List.init].
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ # range 10;;
+ - : int list = [0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
 [*----------------------------------------------------------------------------*)
 
 let rec range n =
@@ -59,15 +56,15 @@ let rec range n =
     | a -> a :: aux (a + 1)
 in aux 0
 
-(*----------------------------------------------------------------------------*
- ## Funkcija `range`
-[*----------------------------------------------------------------------------*)
-
-(*----------------------------------------------------------------------------*
- Funkcija `range` naj sprejme število in vrne seznam vseh celih števil od 0 do
- vključno danega števila. Za neprimerne argumente naj funkcija vrne prazen
- seznam. Funkcija naj bo repno rekurzivna. Pri tem ne smete uporabiti vgrajene
- funkcije `List.init`.
+(*----------------------------------------------------------------------------*]
+ Funkcija [map f list] sprejme seznam [list] oblike [x0; x1; x2; ...] in
+ funkcijo [f] ter vrne seznam preslikanih vrednosti, torej
+ [f x0; f x1; f x2; ...].
+ Pri tem ne smete uporabiti vgrajene funkcije [List.map].
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ # let plus_two = (+) 2 in
+   map plus_two [0; 1; 2; 3; 4];;
+ - : int list = [2; 3; 4; 5; 6]
 [*----------------------------------------------------------------------------*)
 
 let rec map f l =
@@ -75,14 +72,10 @@ let rec map f l =
 let rec map f l =
   List.fold_right (fun h t -> f h :: t) l []
 
-(*----------------------------------------------------------------------------*
- ## Funkcija `map`
-[*----------------------------------------------------------------------------*)
-
-(*----------------------------------------------------------------------------*
- Funkcija `map f list` naj sprejme seznam `list` oblike `x0; x1; x2; ...` in
- funkcijo `f` ter vrne seznam preslikanih vrednosti, torej `f x0; f x1; f x2;
- ...`. Pri tem ne smete uporabiti vgrajene funkcije `List.map`.
+(*----------------------------------------------------------------------------*]
+ Časovna zahtevnost operatorja [@] je linearna v prvem argumentu, poskušajte 
+ napisati reverse_tlrec tako, da bo bolj učinkovit in hkrati repno rekurziven.
+ Pri tem ne smete uporabiti vgrajene funkcije [List.rev] ali [List.rev_append].
 [*----------------------------------------------------------------------------*)
 
 let rec map _ _ = ()

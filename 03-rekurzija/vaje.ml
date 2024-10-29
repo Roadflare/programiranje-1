@@ -1,5 +1,5 @@
 (* ========== Vaja 2: Funkcijsko Programiranje  ========== *)
-
+ 
 (*----------------------------------------------------------------------------*]
  Definirajte pomožno funkcijo za obračanje seznamov.
 [*----------------------------------------------------------------------------*)
@@ -91,6 +91,7 @@ let primer_map_1 =
 [*----------------------------------------------------------------------------*)
 
 let rec map_tlrec f l = List.fold_right (fun h t -> f h :: t) l []
+let rec map_tlrec f l = List.fold_right (fun h t -> f h :: t) l []
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `mapi`
@@ -112,6 +113,12 @@ let rec map_tlrec f l = List.fold_right (fun h t -> f h :: t) l []
  Pri tem ne smete uporabiti vgrajene funkcije `List.mapi`.
 [*----------------------------------------------------------------------------*)
 
+let rec mapi f l =
+  let rec aux f l i =
+    match l with
+    | [] -> []
+    | x :: xs -> f x i :: aux f xs (i + 1)
+in aux f l 0
 let rec mapi f l =
   let rec aux f l i =
     match l with
@@ -150,6 +157,27 @@ let rec zip a b =
   else
     []
     (*Failure "Different length of input lists" *)
+let rec length a =
+  match a with
+  | [] -> 0
+  | _ :: x -> 1 + length x
+
+let hd a =
+  match a with
+  | [] -> []
+  | x :: xs -> x
+
+let tl a =
+  match a with
+  | [] -> []
+  | x :: xs -> xs
+
+let rec zip a b =
+  if length a = length b then
+  (hd a, hd b) :: zip (tl a) (tl b)
+  else
+    []
+    (*Failure "Different length of input lists" *)
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `unzip`
@@ -161,10 +189,11 @@ let rec zip a b =
   Pri tem ne smete uporabiti vgrajene funkcije `List.split`.
 [*----------------------------------------------------------------------------*)
 
-let rec unzip _ = ()
-
-let primer_unzip_1 = unzip [(0,"a"); (1,"b"); (2,"c")]
-(* val primer_unzip_1 : int list * string list = ([0; 1; 2], ["a"; "b"; "c"]) *)
+let rec unzip l = ()
+(*
+  let rec aux a b = function
+  
+in aux l [] [] *)
 
 (*----------------------------------------------------------------------------*
  Funkcija `unzip_tlrec` je repno rekurzivna različica funkcije `unzip`.
@@ -205,6 +234,8 @@ let primer_loop = loop (fun x -> x < 10) ((+) 4) 4
  ... xn)`. V primeru seznama z manj kot dvema elementoma naj vrne napako.
 [*----------------------------------------------------------------------------*)
 
+let rec loop con f x =
+  if con x then loop con f (f x) else x
 let rec loop con f x =
   if con x then loop con f (f x) else x
 

@@ -37,6 +37,7 @@ let rec repeat str x =
   match x with
   | x when x <= 0 -> []
   | x -> str :: repeat str (x - 1)
+  | x -> str :: repeat str (x - 1)
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `repeat`

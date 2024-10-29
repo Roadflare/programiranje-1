@@ -27,7 +27,7 @@ let rec reverse list =
 let rec repeat str x =
   match x with
   | x when x <= 0 -> []
-  | x -> str :: repeat str (x - 1) 
+  | x -> str :: repeat str (x - 1)
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `repeat`
@@ -80,12 +80,7 @@ let primer_map_1 =
  `map`.
 [*----------------------------------------------------------------------------*)
 
-let map_tlrec _ _ = ()
-
-let primer_map_2 =
-  let plus_two = (+) 2 in
-  map_tlrec plus_two [0; 1; 2; 3; 4]
-(* val primer_map_2 : int list = [2; 3; 4; 5; 6] *)
+let rec map_tlrec f l = List.fold_right (fun h t -> f h :: t) l []
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `mapi`
@@ -107,10 +102,12 @@ let primer_map_2 =
  Pri tem ne smete uporabiti vgrajene funkcije `List.mapi`.
 [*----------------------------------------------------------------------------*)
 
-let mapi _ _ = ()
-
-let primer_mapi = mapi (+) [0; 0; 0; 2; 2; 2]
-(* val primer_mapi : int list = [0; 1; 2; 5; 6; 7] *)
+let rec mapi f l =
+  let rec aux f l i =
+    match l with
+    | [] -> []
+    | x :: xs -> f x i :: aux f xs (i + 1)
+in aux f l 0
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `zip`
@@ -122,12 +119,27 @@ let primer_mapi = mapi (+) [0; 0; 0; 2; 2; 2]
  Pri tem ne smete uporabiti vgrajene funkcije `List.combine`.
 [*----------------------------------------------------------------------------*)
 
-let rec zip _ _ = ()
+let rec length a =
+  match a with
+  | [] -> 0
+  | _ :: x -> 1 + length x
 
-let primer_zip_1 = zip [1; 1; 1; 1] [0; 1; 2; 3]
-(* val primer_zip_1 : (int * int) list = [(1, 0); (1, 1); (1, 2); (1, 3)] *)
+let hd a =
+  match a with
+  | [] -> []
+  | x :: xs -> x
 
-(* let primer_zip_2 = zip [1; 1; 1; 1] [1; 2; 3; 4; 5] *)
+let tl a =
+  match a with
+  | [] -> []
+  | x :: xs -> xs
+
+let rec zip a b =
+  if length a = length b then
+  (hd a, hd b) :: zip (tl a) (tl b)
+  else
+    []
+    (*Failure "Different length of input lists" *)
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `unzip`
@@ -183,11 +195,8 @@ let primer_loop = loop (fun x -> x < 10) ((+) 4) 4
  ... xn)`. V primeru seznama z manj kot dvema elementoma naj vrne napako.
 [*----------------------------------------------------------------------------*)
 
-let rec fold_left_no_acc _ _ = ()
-
-let primer_fold_left_no_acc =
-  fold_left_no_acc (^) ["F"; "I"; "C"; "U"; "S"]
-(* val primer_fold_left_no_acc : string = "FICUS" *)
+let rec loop con f x =
+  if con x then loop con f (f x) else x
 
 (*----------------------------------------------------------------------------*
  ## Funkcija `apply_sequence`

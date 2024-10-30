@@ -19,13 +19,13 @@
  Namig: Občudujte informativnost tipov funkcij.
 [*----------------------------------------------------------------------------*)
 
-type euro 
+type euro = Euro of float
 
-type dollar 
+type dollar = Dollar of float
 
-let dollar_to_euro _ = ()
+let dollar_to_euro (Euro a) = Dollar (0.92 *. a)
 
-let euro_to_dollar _ = ()
+let euro_to_dollar (Dollar a) = Euro (a *. 1.08)
 
 (* let primer_valute_1 = dollar_to_euro (Dollar 0.5) *)
 (* val primer_valute_1 : euro = Euro 0.4305 *)
@@ -39,9 +39,15 @@ let euro_to_dollar _ = ()
  Ocaml sam opozori, da je potrebno popraviti funkcijo `to_pound`.
 [*----------------------------------------------------------------------------*)
 
-type currency 
+type currency = 
+  | Yen of float
+  | Pound of float
+  | Sek of float
 
-let to_pound _ = ()
+let to_pound = function
+  | Yen a -> Pound (a *. 0.005)
+  | Pound a -> Pound a
+  | Sek a -> Pound (a *. 0.07)
 
 (* let primer_valute_2 = to_pound (Yen 100.) *)
 (* val primer_valute_2 : currency = Pound 0.700000000000000067 *)
@@ -69,9 +75,12 @@ let to_pound _ = ()
  Nato napišite testni primer, ki bi predstavljal `[5; true; false; 7]`.
 [*----------------------------------------------------------------------------*)
 
-type intbool_list 
+type intbool_list =
+  | Nil
+  | Int of int * intbool_list
+  | Bool of bool * intbool_list
 
-let test = ()
+let test = Int (5, Bool (true, Bool (false, Int (7, Nil))))
 
 (*----------------------------------------------------------------------------*
  Funkcija `intbool_map f_int f_bool ib_list` preslika vrednosti `ib_list` v nov
@@ -79,7 +88,7 @@ let test = ()
  oz. `f_bool`.
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_map _ _ _ = ()
+let rec intbool_map f g l = ()
 
 (*----------------------------------------------------------------------------*
  Funkcija `intbool_reverse` obrne vrstni red elementov `intbool_list` seznama.

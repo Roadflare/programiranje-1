@@ -17,12 +17,13 @@
 
 module type NAT = sig
   type t
-
+  val to_int : t -> int
+  val of_int : int -> t
   val eq  : t -> t -> bool
   val zero : t
-  (* Dodajte manjkajoče! *)
-  (* val to_int : t -> int *)
-  (* val of_int : int -> t *)
+  val ( +++ ) : t -> t -> t
+  val ( --- ) : t -> t -> t
+  val ( *** ) : t -> t -> t
 end
 
 (*----------------------------------------------------------------------------*
@@ -34,11 +35,15 @@ end
 [*----------------------------------------------------------------------------*)
 
 module Nat_int : NAT = struct
-
   type t = int
-  let eq x y = failwith "later"
+  let to_int (x : t) : int = x
+  let of_int (x : int) : t = if x > 0 then x else 0
+  let ( +++ ) x y = x + y
+  let ( --- ) x y = if x - y <= 0 then 0 else x - y
+  let ( *** ) x y = if x <= 0 then 0 else
+    if y <= 0 then 0 else x * y
+  let eq x y = x = y
   let zero = 0
-  (* Dodajte manjkajoče! *)
 
 end
 
@@ -53,10 +58,47 @@ end
 
 module Nat_peano : NAT = struct
 
-  type t = unit (* To morate spremeniti! *)
-  let eq x y = failwith "later"
-  let zero = () (* To morate spremeniti! *)
-  (* Dodajte manjkajoče! *)
+type t = Zero | Succ of t
+let rec eq x y = 
+  match x, y with
+  | Zero, Zero -> true
+  | Zero, Succ _ -> false
+  | Succ _, Zero -> false
+  | Succ x', Succ y' -> eq x' y'
+let zero = Zero
+
+let to_int x =
+  let rec aux x acc =
+    match x with
+    | Zero -> acc
+    | Succ x' -> aux x' (acc + 1)
+  in aux x 0
+
+let of_int x =
+  let rec aux x acc =
+    match x with
+    | 0 -> acc
+    | a -> aux (a - 1) (Succ acc)
+  in aux x Zero
+
+let rec ( +++ ) (x : t) (y : t) : t =
+  match x, y with
+  | Zero, Zero -> Zero
+  | a, Zero -> a
+  | Zero, a -> a
+  | a, Succ y' -> Succ (( +++ ) a y')
+
+let rec ( *** ) (x : t) (y : t) : t =
+  match x, y with
+  | Zero, Zero -> Zero
+  | Zero , Succ y' -> Zero
+  | Succ x', Zero -> Zero
+  | a, Succ y' -> ( +++ ) (( *** ) a y') a
+
+let ( --- ) x y =
+  match to_int x, to_int y with
+  | a, b when a > b -> of_int (a - b)
+  | _, _ -> Zero
 
 end
 
@@ -135,7 +177,13 @@ let sum_nat_100 =
 module type COMPLEX = sig
   type t
   val eq : t -> t -> bool
-  (* Dodajte manjkajoče! *)
+  val zero : t
+  val enka : t
+  val i : t
+  val negacija : t -> t
+  val konjugacija : t -> t
+  val ( +++ ) : t -> t -> t
+  val ( *** ) : t -> t -> t
 end
 
 (*----------------------------------------------------------------------------*
@@ -146,9 +194,16 @@ end
 module Cartesian : COMPLEX = struct
 
   type t = {re : float; im : float}
+  let zero : t = {re = 0.; im = 0.}
+  let enka : t = {re = 1.; im = 0.}
+  let i : t = {re = 0.; im = 1.}
+  let eq (x : t) (y : t) = x = y
+  
+  let negacija (x : t) : t = {re = -. x.re; im = -. x.im }
+  let konjugacija (x : t) : t = {re = x.re; im = -. x.im}
+  let ( +++ ) (x : t)  (y : t) : t = {re = x.re +. y.re; im = x.im +. y.im}
 
-  let eq x y = failwith "later"
-  (* Dodajte manjkajoče! *)
+  let ( *** ) (x : t) (y : t) : t = {re = (x.re *. y.re -. x.im *. y.im); im =  (x.im *. y.re +. x.re *. y.im)}
 
 end
 
@@ -168,7 +223,20 @@ module Polar : COMPLEX = struct
   let rad_of_deg deg = (deg /. 180.) *. pi
   let deg_of_rad rad = (rad /. pi) *. 180.
 
-  let eq x y = failwith "later"
   (* Dodajte manjkajoče! *)
+  let zero = {magn = 0.; arg = 0.}
+  let enka = {magn = 1.; arg = 0.}
+
+  let i = {magn = 1.; arg = (pi /. 2.)}
+
+  let eq (x : t) (y : t) = x = y
+
+  let negacija (x : t) = {magn = x.magn; arg = -. x.arg}
+
+  let konjugacija (x : t) = {magn = x.magn; arg = pi +. x.arg}
+
+  let ( +++ ) (x : t) (y : t) = {magn = x.magn +. y.magn; arg = x.arg -. y. arg}
+
+  let ( *** ) (x : t) (y : t) = {magn = x.magn *. y.magn; arg = y.arg +. x.arg}
 
 end
